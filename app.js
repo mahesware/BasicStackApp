@@ -64,15 +64,25 @@ const html = `
   <body>
     <section>
     <form id="stackAppForm">
+    <label> Stack Size:</label>
     <input type="text" id="size"  placeholder="Enter Stack Size" required/> 
+    <br/>
+    <label> Value:</label>
+    <input type="text" id="value" placeholder="Enter a value to push in to the stack" />
+    <br/>
     <button type="button" id="push" >Push</button>
+    <br/>
     <button type="button" id="pop" > Pop</button>
     <div id="stack"></div>
     </form>
     </section>
     <script>
      document.getElementById("push").addEventListener("click",async(e) =>{
-     alert('user has tried to push the data..');
+     const value = document.getElementById("value")
+     console.log('user has tried to push the data..',value);
+     const res = await fetch("/push",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringfy{value};
+     const data = await res.json();
+     document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
      })
      document.getElementById("pop").addEventListener("click",async(e) =>{
      alert('user has tried to pop the data..');
