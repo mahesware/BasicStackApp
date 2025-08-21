@@ -82,7 +82,7 @@ const html = `
      document.getElementById("push").addEventListener("click",async(e) =>{
      const value = document.getElementById("value").value.trim();
      console.log('user has tried to push the data..',value);
-     const res = await fetch("/push",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringify{value}});
+     const res = await fetch("/push",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringify({value}}));
      const data = await res.json();
      document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
      })
