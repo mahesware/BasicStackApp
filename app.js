@@ -73,7 +73,9 @@ const html = `
     <button type="button" id="push" >Push</button>
     <br/>
     <button type="button" id="pop" > Pop</button>
+    <label>Stack: </label>
     <div id="stack"></div>
+    
     </form>
     </section>
     <script>
