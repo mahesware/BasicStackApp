@@ -3,6 +3,24 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => res.type('html').send(html));
+let stack = [];
+app.post("/push",(req,res)=>{
+ if(req.body && req.body.value){
+  stack.push(req.body.value)
+  return res.json({stack})
+ }
+ else return res.status(400).send("please pass a value");
+});
+app.post("/pop",(req,res) => {
+ if(stack.length == 0) return 
+ res.status(400).send("Stack is empty");
+ const value = stack.pop();
+ res.json({popped:value,stack:stack});
+});
+app.get("/stack",(req,res) => {
+ res.json({stack});
+});
+
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
