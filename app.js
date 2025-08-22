@@ -4,12 +4,27 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.get("/", (req, res) => res.type('html').send(html));
 let stack = [];
+let maxSize = 0;
+app.post("/setStackSize",(req,res)=>{
+ if(req.body && req.body.value){
+  if(req.body.value <=0) return res.status(400).send('invalid size')
+  else{
+   maxsize = req.body.value;
+   stack = [];
+   return res.json({message:`Stack size set to ${req.body.value}`});
+  }
+ }
+ else return res.status(400).send("please pass a value");
+});
 app.post("/push",(req,res)=>{
  console.log('request for push:');
  console.log(req.body);
  if(req.body && req.body.value){
-  stack.push(req.body.value)
-  return res.json({stack})
+  if(stack.length >= maxsize)  return res.status(400).send("Stack overflow: Maxsize reached!");
+  else {
+   stack.push(req.body.value)
+   return res.json({stack})
+  }
  }
  else return res.status(400).send("please pass a value");
 });
