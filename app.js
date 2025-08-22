@@ -5,6 +5,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.type('html').send(html));
 let stack = [];
 let maxsize = 0;
+
 app.post("/setStackSize",(req,res)=>{
  if(req.body && req.body.value){
   if(req.body.value <=0) return res.status(400).send('invalid size')
@@ -39,7 +40,9 @@ app.post("/pop",(req,res) => {
 app.get("/stack",(req,res) => {
  res.json({stack});
 });
-
+app.get("/getStackSize",(req,res)=>{
+	res.json({maxsize});
+});
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
@@ -61,44 +64,126 @@ const html = `
         font-style: normal;
         font-weight: 700;
       }
-      html {
-        font-family: neo-sans;
-        font-weight: 700;
-        font-size: calc(62rem / 16);
-      }
-      body {
-        background: white;
-      }
-      section {
-        border-radius: 1em;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-      }
+      
+
+ body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      background: #f9f9f9;
+    }
+
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      background: #007BFF;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .stack-display {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 5px;
+      min-height: 50px;
+    }
     </style>
+	
   </head>
   <body>
-    <section>
-    <form id="stackAppForm">
-    <label> Stack Size:</label>
-    <input type="text" id="size"  placeholder="Enter Stack Size" required/> 
-	<button type="button" id="setSize">Set The Size</button>
-    <br/>
-    <label> Value:</label>
-    <input type="text" id="value" placeholder="Enter a value to push in to the stack" />
-    <br/>
-    <button type="button" id="push" >Push</button>
-    <br/>
-    <button type="button" id="pop" > Pop</button>
-    <label>Stack: </label>
-    <div id="stack"></div>
-    
-    </form>
-    </section>
+    <div class="container">
+    <h1>Stack Operations</h1>
+
+    <div class="form-group">
+      <label for="size">Stack Size:</label>
+      <input type="number" id="size" placeholder="Enter Stack Size">
+      <button id="setSize">Set The Size</button>
+    </div>
+
+    <div class="form-group">
+      <label for="value">Value:</label>
+      <input type="text" id="value" placeholder="Enter a value to push">
+    </div>
+
+    <div class="buttons">
+      <button id="push">Push</button>
+      <button id="pop">Pop</button>
+    </div>
+
+    <div class="form-group">
+      <label>Stack:</label>
+      <div id="stack" class="stack-display"></div>
+    </div>
+  </div>
     <script>
+	document.addEventListener("DOMContentLoaded", async () => {
+	const stackSizeRes = await fetch("/getStackSize",{method:"GET"});
+     if(!stackSizeRes.ok){
+	  const errorText = await stackSizeRes.text();
+      console.log('Failed fetching latest StackSize ',errorText);
+	 }	
+	 else{
+		 const stackSize = await stackSizeRes.json();
+		 console.log('setting the stack size',stackSize.maxsize);
+		 document.getElementById("size").value = stackSize.maxsize;
+	 }
+	 const res = await fetch("/stack",{method:"GET"});
+	 if(!res.ok){
+      const errorText = await res.text();
+      console.log('Failed fetching latest Stackdata: ',errorText);
+     }
+     else{
+		 const data = await res.json();
+		 document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
+	 }
+	});
      document.getElementById("push").addEventListener("click",async(e) =>{
      const value = document.getElementById("value").value.trim();
      console.log('user has tried to push the data..',value);
