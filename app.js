@@ -82,12 +82,20 @@ const html = `
      document.getElementById("push").addEventListener("click",async(e) =>{
      const value = document.getElementById("value").value.trim();
      console.log('user has tried to push the data..',value);
-     const res = await fetch("/push",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringify({value}}));
+     const res = await fetch("/push",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringify({value})});
      const data = await res.json();
      document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
      })
      document.getElementById("pop").addEventListener("click",async(e) =>{
      alert('user has tried to pop the data..');
+     const res = await fetch("/stack",{method:"GET"});
+     const data = await res.json();
+     if(data.stack && data.stack.length>0){
+     // code to invoke the pop Rest API
+     }
+     else {
+     alert('no elements in stack, pop is not applicable');
+     }
      })
     </script>
   </body>
