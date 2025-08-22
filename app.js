@@ -30,8 +30,9 @@ app.post("/push",(req,res)=>{
  else return res.status(400).send("please pass a value");
 });
 app.post("/pop",(req,res) => {
- if(stack.length == 0) return 
- res.status(400).send("Stack is empty");
+ if(stack.length == 0){
+	 return  res.status(400).send("Stack is empty");
+ }
  const value = stack.pop();
  res.json({popped:value,stack:stack});
 });
@@ -114,7 +115,6 @@ const html = `
      }
      })
      document.getElementById("pop").addEventListener("click",async(e) =>{
-     alert('user has tried to pop the data..');
      const res = await fetch("/stack",{method:"GET"});
      if(!res.ok){
       const errorText = await res.text();
@@ -123,7 +123,15 @@ const html = `
      else{
      const data = await res.json();
      if(data.stack && data.stack.length>0){
-     // code to invoke the pop Rest API
+     const popRes = await fetch("/pop",{method:"POST"});
+	 if(!res.ok){
+		 const errorText = await popRes.text();
+		 alert(errorText);
+	 }else{
+		const poppedVal = await popRes.json();
+		document.getElementById("stack").innerText =
+          "Stack: " + poppedVal.stack.join(", ");
+	 }
      }
      else {
      alert('no elements in stack, pop is not applicable');
