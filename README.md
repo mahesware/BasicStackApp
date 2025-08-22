@@ -3,6 +3,18 @@
 This is the [Express](https://expressjs.com) [Basic Stack App](https://expressjs.com/en/starter/hello-world.html) example on [Render](https://render.com).
 
 The app in this repo is deployed at [https://express.onrender.com](https://express.onrender.com).
+On load The app will display :
+1.Current Size of the stack
+2.Values present on the stack.
+
+Operations:
+Push - Add new values to the stack
+Pop - Remove the last value from the stack
+
+Validations:
+Push gets rejected when stack size is not configured 
+Pop gets rejected if stack has zero elements
+Push gets rejected if stack size is reached the configured limit.
 
 ## Deployment
 
