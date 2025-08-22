@@ -6,7 +6,7 @@ app.get("/", (req, res) => res.type('html').send(html));
 let stack = [];
 app.post("/push",(req,res)=>{
  console.log('request for push:');
- console.log(req.json();
+ console.log(req.json());
  if(req.body && req.body.value){
   stack.push(req.body.value)
   return res.json({stack})
