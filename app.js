@@ -43,7 +43,13 @@ app.get("/stack",(req,res) => {
 app.get("/getStackSize",(req,res)=>{
 	res.json({maxsize});
 });
+app.get("/resetSize",(req,res)=>{
+	maxsize = 0;
+	stack= [];
+	res.json({maxsize,stack});
+});
 
+module.exports = app;
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 server.keepAliveTimeout = 120 * 1000;
@@ -145,6 +151,7 @@ const html = `
       <label for="size">Stack Size:</label>
       <input type="number" id="size" placeholder="Enter Stack Size">
       <button id="setSize">Set The Size</button>
+	  <!-- <button id="resetSize">Reset the Size</button> -->
     </div>
 
     <div class="form-group">
@@ -184,6 +191,12 @@ const html = `
 		 document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
 	 }
 	});
+	/*document.getElementById("resetSize").addEventListener("click",async(e) =>{
+		const res = await fetch("/resetSize",{method:"GET"});
+		if(res.ok){
+			alert('sucess');
+		}
+	});*/
      document.getElementById("push").addEventListener("click",async(e) =>{
      const value = document.getElementById("value").value.trim();
      console.log('user has tried to push the data..',value);
