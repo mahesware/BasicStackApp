@@ -4,7 +4,7 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.get("/", (req, res) => res.type('html').send(html));
 let stack = [];
-let maxSize = 0;
+let maxsize = 0;
 app.post("/setStackSize",(req,res)=>{
  if(req.body && req.body.value){
   if(req.body.value <=0) return res.status(400).send('invalid size')
@@ -20,6 +20,7 @@ app.post("/push",(req,res)=>{
  console.log('request for push:');
  console.log(req.body);
  if(req.body && req.body.value){
+  if(maxsize ==0) return res.status(400).send('Define the stack size before pushing the values');
   if(stack.length >= maxsize)  return res.status(400).send("Stack overflow: Maxsize reached!");
   else {
    stack.push(req.body.value)
@@ -83,6 +84,7 @@ const html = `
     <form id="stackAppForm">
     <label> Stack Size:</label>
     <input type="text" id="size"  placeholder="Enter Stack Size" required/> 
+	<button type="button" id="setSize">Set The Size</button>
     <br/>
     <label> Value:</label>
     <input type="text" id="value" placeholder="Enter a value to push in to the stack" />
@@ -103,8 +105,11 @@ const html = `
      if(!res.ok){
       const errorText = await res.text();
       console.log('error: ',errorText);
+	  alert(errorText);
+	  document.getElementById("value").value = '';
      }else{
       const data = await res.json();
+	  document.getElementById("value").value = '';
       document.getElementById("stack").innerText ="Stack: "+data.stack.join(", ");
      }
      })
@@ -125,6 +130,19 @@ const html = `
      }
      }
      })
+	  document.getElementById("setSize").addEventListener("click",async(e) =>{
+		 const value = document.getElementById("size").value.trim();
+		 const res = await fetch("/setStackSize",{method:"POST",headers:{"Content-type":"application/json"},body:JSON.stringify({value})});
+		 if(!res.ok){
+		  const errorText = await res.text();
+		  console.log('error: ',errorText);
+		  alert(errorText);
+		  document.getElementById("value").value = '';
+		 }else{
+		  const data = await res.json();
+		  alert(data.message);
+		 }  
+	  });
     </script>
   </body>
 </html>
