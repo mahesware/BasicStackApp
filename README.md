@@ -8,12 +8,12 @@ On load The app will display :
 2.Values present on the stack.
 
 Operations:
-Push - Add new values to the stack
+Push - Add new values to the stack /n
 Pop - Remove the last value from the stack
 
 Validations:
-Push gets rejected when stack size is not configured 
-Pop gets rejected if stack has zero elements
+Push gets rejected when stack size is not configured  /n
+Pop gets rejected if stack has zero elements /n
 Push gets rejected if stack size is reached the configured limit.
 
 ## Deployment
