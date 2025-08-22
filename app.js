@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
-
+app.use(express.json());
 app.get("/", (req, res) => res.type('html').send(html));
 let stack = [];
 app.post("/push",(req,res)=>{
